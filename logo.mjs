@@ -8,7 +8,7 @@
 //   logo-glyph.svg  sparser still, for favicon sizes
 // plus logo.html, which puts all three at every size on light and dark.
 //
-// Run it with `node sketches/logo.mjs`, then open `sketches/logo.html`.
+// Run it with `node logo.mjs`, then open `logo.html`.
 import { writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { CORE, drawing, GLYPH, layers, nodes, RING_GLYPH, RING_SPARSE, SIZE } from './spleenDrawing.mjs'

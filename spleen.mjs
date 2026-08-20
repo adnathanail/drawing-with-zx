@@ -1,6 +1,6 @@
 // Emits a standalone spleen.html: the labelled plate, with a scalar strip and
 // the attribution badge, over a key to what each mark stands for.
-// Run it with `node sketches/spleen.mjs`, then open `sketches/spleen.html`.
+// Run it with `node spleen.mjs`, then open `spleen.html`.
 import { writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { C, drawing, LABEL_FILL, layers } from './spleenDrawing.mjs'

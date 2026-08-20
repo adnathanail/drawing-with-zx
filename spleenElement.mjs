@@ -11,10 +11,11 @@
 // has a single text slot under the node, so the plate's grey labels ride in it
 // alongside the phases and land wherever the viewer puts them.
 //
-// The page embeds `dist/index.bundle.js`, so it opens from disk with no server
-// — a module script loaded by `src` would be blocked over `file:`. Build first:
+// The page embeds the package's bundle, so it opens from disk with no server
+// — a module script loaded by `src` would be blocked over `file:`. The package
+// has to be installed first:
 //
-//   npm run build && node sketches/spleenElement.mjs
+//   npm install && node spleenElement.mjs
 //
 import { readFileSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
@@ -69,12 +70,12 @@ const diagram = {
   scalar: '2√2',
 }
 
-const bundle = fileURLToPath(new URL('../dist/index.bundle.js', import.meta.url))
+const bundle = fileURLToPath(import.meta.resolve('@adnathanail/zxcc'))
 let element
 try {
   element = readFileSync(bundle, 'utf8')
 } catch {
-  console.error(`Missing ${bundle}\nRun \`npm run build\` first — the page embeds the bundle.`)
+  console.error(`Missing ${bundle}\nRun \`npm install\` first — the page embeds the package's bundle.`)
   process.exit(1)
 }
 

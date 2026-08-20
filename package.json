@@ -1,0 +1,24 @@
+{
+  "name": "drawing-with-zx",
+  "version": "1.0.0",
+  "description": "Drawings made with zxcc's styles",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adnathanail/drawing-with-zx.git"
+  },
+  "bugs": {
+    "url": "https://github.com/adnathanail/drawing-with-zx/issues"
+  },
+  "homepage": "https://github.com/adnathanail/drawing-with-zx#readme",
+  "scripts": {
+    "plate": "node spleen.mjs",
+    "logo": "node logo.mjs",
+    "element": "node spleenElement.mjs"
+  },
+  "dependencies": {
+    "@adnathanail/zxcc": "^0.3.1"
+  }
+}
