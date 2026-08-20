@@ -4,11 +4,13 @@ Drawings made with [zxcc](https://github.com/adnathanail/zxcc)'s styles
 
 ## SpLean
 
+Each script writes its output into `out/`.
+
 | Run | Writes |
 | --- | --- |
-| `npm run plate` | `spleen.html` — the labelled plate, with a key |
-| `npm run logo` | `logo.svg`, `logo-mark.svg`, `logo-glyph.svg`, and `logo.html` to compare them at size |
-| `npm run element` | `spleen-element.html` — the same plate as a `DiagramData`, drawn by `<zx-diagram>` itself |
+| `npm run plate` | `out/spleen.html` — the labelled plate, with a key |
+| `npm run logo` | `out/logo.svg`, `out/logo-mark.svg`, `out/logo-glyph.svg`, and `out/logo.html` to compare them at size |
+| `npm run element` | `out/spleen-element.html` — the same plate as a `DiagramData`, drawn by `<zx-diagram>` itself |
 
 That last one is the exception to all of the above: it needs
 `@adnathanail/zxcc` installed (`npm install`), and it is the one output not

@@ -1,7 +1,7 @@
 // Emits a standalone spleen.html: the labelled plate, with a scalar strip and
 // the attribution badge, over a key to what each mark stands for.
-// Run it with `node spleen.mjs`, then open `spleen.html`.
-import { writeFileSync } from 'node:fs'
+// Run it with `node spleen.mjs`, then open `out/spleen.html`.
+import { mkdirSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { C, drawing, LABEL_FILL, layers } from './spleenDrawing.mjs'
 
@@ -80,4 +80,7 @@ ${layers(drawing())}
 </script>
 `
 
-writeFileSync(process.argv[2] ?? fileURLToPath(new URL('spleen.html', import.meta.url)), html)
+const OUT = new URL('out/', import.meta.url)
+mkdirSync(OUT, { recursive: true })
+
+writeFileSync(process.argv[2] ?? fileURLToPath(new URL('spleen.html', OUT)), html)

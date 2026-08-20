@@ -1,4 +1,4 @@
-// Emits spleen-element.html: the same spleen, built as a `DiagramData` and
+// Emits out/spleen-element.html: the same spleen, built as a `DiagramData` and
 // handed to the real `<zx-diagram>` rather than drawn by hand.
 //
 // The sketch's node table is in pixels at a scale of 40, and layout() puts a
@@ -17,7 +17,7 @@
 //
 //   npm install && node spleenElement.mjs
 //
-import { readFileSync, writeFileSync } from 'node:fs'
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { CORD_WEB, EXTRA_EDGES, nodes, RING } from './spleenDrawing.mjs'
 
@@ -111,7 +111,7 @@ ${element}
 </script>
 `
 
-writeFileSync(
-  process.argv[2] ?? fileURLToPath(new URL('spleen-element.html', import.meta.url)),
-  html,
-)
+const OUT = new URL('out/', import.meta.url)
+mkdirSync(OUT, { recursive: true })
+
+writeFileSync(process.argv[2] ?? fileURLToPath(new URL('spleen-element.html', OUT)), html)

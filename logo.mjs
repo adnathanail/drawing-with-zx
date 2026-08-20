@@ -8,8 +8,8 @@
 //   logo-glyph.svg  sparser still, for favicon sizes
 // plus logo.html, which puts all three at every size on light and dark.
 //
-// Run it with `node logo.mjs`, then open `logo.html`.
-import { writeFileSync } from 'node:fs'
+// Run it with `node logo.mjs`, then open `out/logo.html`.
+import { mkdirSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { CORE, drawing, GLYPH, layers, nodes, RING_GLYPH, RING_SPARSE, SIZE } from './spleenDrawing.mjs'
 
@@ -92,7 +92,9 @@ for (const [name, keep, parts] of [
   console.log(`${name}: drawn at ${SCALE[name]}, ceiling ${scale.toFixed(2)} at ${pair}`)
 }
 
-const out = name => fileURLToPath(new URL(name, import.meta.url))
+const OUT = new URL('out/', import.meta.url)
+mkdirSync(OUT, { recursive: true })
+const out = name => fileURLToPath(new URL(name, OUT))
 writeFileSync(out('logo.svg'), full.markup)
 writeFileSync(out('logo-mark.svg'), mark.markup)
 writeFileSync(out('logo-glyph.svg'), glyph.markup)
