@@ -14,15 +14,15 @@
 import { Resvg } from '@resvg/resvg-js'
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
-import { CORE, drawing, GLYPH, layers, nodes, RING_GLYPH, RING_SPARSE, SIZE } from './spleenDrawing.mjs'
+import { CORE, drawing, layers, LOGO, nodes, RING_LOGO, RING_SPARSE, SIZE } from './spleenDrawing.mjs'
 
 // The sizes each mark is shown at are the range it is meant for: the whole
 // organ stops where its interior stops reading, and the two reduced marks
 // start below where it does.
 const SIZES = {
-  full: [256, 128, 96],
+  diagram: [256, 128, 96],
   mark: [128, 96, 64],
-  glyph: [64, 48, 32],
+  logo: [64, 48, 32],
 }
 
 /** Grow a box to a square about its own centre, so a mark that is taller than
@@ -50,7 +50,7 @@ function svg(parts, { square = false } = {}) {
  * bigger share of itself to be spider. These are the numbers to tweak, and
  * `ceiling()` below prints how far each can go.
  */
-const SCALE = { mark: 2.1, glyph: 3.8 }
+const SCALE = { mark: 2.1, logo: 3.8 }
 
 /** How much of a node's own size each shape reaches out from its centre: a
  *  spider its radius, a boundary half that, an H-box half its width. */
@@ -75,21 +75,21 @@ function ceiling(keep, positions) {
 
 // The three vessels leave the hilum within 33° of each other, so how far out
 // they run is what sets how far apart their dots land.
-const full = svg(drawing({ text: false, stubs: 62 }))
+const diagram = svg(drawing({ text: false, stubs: 62 }))
 const mark = svg(
   drawing({ ring: RING_SPARSE, keep: CORE, text: false, stubs: 140, scale: SCALE.mark }),
   { square: true },
 )
-// The glyph is what is left when every mark has to be worth a pixel: a capsule
+// The logo is what is left when every mark has to be worth a pixel: a capsule
 // of eight spiders, the trabecula in the middle of it, and one vessel.
-const glyph = svg(
-  drawing({ ring: RING_GLYPH, keep: GLYPH, text: false, stubs: 140, scale: SCALE.glyph }),
+const logo = svg(
+  drawing({ ring: RING_LOGO, keep: LOGO, text: false, stubs: 140, scale: SCALE.logo }),
   { square: true },
 )
 
 for (const [name, keep, parts] of [
   ['mark', CORE, mark.parts],
-  ['glyph', GLYPH, glyph.parts],
+  ['logo', LOGO, logo.parts],
 ]) {
   const { scale, pair } = ceiling(keep, parts.positions)
   console.log(`${name}: drawn at ${SCALE[name]}, ceiling ${scale.toFixed(2)} at ${pair}`)
@@ -105,13 +105,11 @@ const out = name => fileURLToPath(new URL(name, OUT))
 const png = (markup, height) =>
   new Resvg(markup, { fitTo: { mode: 'height', value: height } }).render().asPng()
 
-// The names the assets are published under are not the ones they carry in here:
-// the whole organ goes out as the diagram, and the glyph as the logo. Each lands
-// in a directory of its own, holding its SVG and a PNG per size.
+// Each asset lands in a directory of its own, holding its SVG and a PNG per size.
 for (const [dir, asset, sizes] of [
-  ['diagram', full, SIZES.full],
+  ['diagram', diagram, SIZES.diagram],
   ['mark', mark, SIZES.mark],
-  ['logo', glyph, SIZES.glyph],
+  ['logo', logo, SIZES.logo],
 ]) {
   mkdirSync(new URL(`${dir}/`, OUT), { recursive: true })
   const stem = `${dir}/splean-${dir}`
@@ -160,12 +158,12 @@ const html = `<!doctype html>
 <h1>SpLean mark</h1>
 <p class="sub">The spleen diagram as a logo: same node positions, wires and Pauli webs as the plate, with the labels, phases, scalar and badge dropped, the vessels cut back to stubs at the hilum, and progressively less kept as the mark gets smaller.</p>
 
-${row('Whole organ — diagram/splean-diagram.svg', SIZES.full, full, '#fcfcfd', false)}
-${row('Whole organ, on dark', SIZES.full, full, '#1c1c1f', true)}
+${row('Whole organ — diagram/splean-diagram.svg', SIZES.diagram, diagram, '#fcfcfd', false)}
+${row('Whole organ, on dark', SIZES.diagram, diagram, '#1c1c1f', true)}
 ${row('Sparse mark — mark/splean-mark.svg', SIZES.mark, mark, '#fcfcfd', false)}
 ${row('Sparse mark, on dark', SIZES.mark, mark, '#1c1c1f', true)}
-${row('Glyph — logo/splean-logo.svg', SIZES.glyph, glyph, '#fcfcfd', false)}
-${row('Glyph, on dark', SIZES.glyph, glyph, '#1c1c1f', true)}
+${row('Logo — logo/splean-logo.svg', SIZES.logo, logo, '#fcfcfd', false)}
+${row('Logo, on dark', SIZES.logo, logo, '#1c1c1f', true)}
 `
 
 writeFileSync(out('logo.html'), html)
