@@ -2,13 +2,16 @@
 // the scalar and the badge left off and the vessels cut back to stubs.
 //
 // Three assets, because one drawing cannot hold up across the whole size range:
-//   logo.svg        the whole organ, tight to its marks, for 128px and up
-//   logo-mark.svg   the sparse capsule, the trabecula and the three vessels,
-//                   in a square box, with the strokes weighted up for 48px
-//   logo-glyph.svg  sparser still, for favicon sizes
-// plus logo.html, which puts all three at every size on light and dark.
+//   diagram/  the whole organ, tight to its marks, for 128px and up
+//   mark/     the sparse capsule, the trabecula and the three vessels, in a
+//             square box, with the strokes weighted up for 48px
+//   logo/     sparser still, for favicon sizes
+// Each gets a directory holding its SVG and a PNG at each of the sizes it is
+// meant for, plus logo.html alongside them, which puts all three at every size
+// on light and dark.
 //
 // Run it with `node logo.mjs`, then open `out/logo.html`.
+import { Resvg } from '@resvg/resvg-js'
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { CORE, drawing, GLYPH, layers, nodes, RING_GLYPH, RING_SPARSE, SIZE } from './spleenDrawing.mjs'
@@ -95,9 +98,26 @@ for (const [name, keep, parts] of [
 const OUT = new URL('out/', import.meta.url)
 mkdirSync(OUT, { recursive: true })
 const out = name => fileURLToPath(new URL(name, OUT))
-writeFileSync(out('logo.svg'), full.markup)
-writeFileSync(out('logo-mark.svg'), mark.markup)
-writeFileSync(out('logo-glyph.svg'), glyph.markup)
+/** Rasterise at a given height, sized the way logo.html sizes its `<svg>`: the
+ *  size a mark is listed at is its height, and the width follows the mark's own
+ *  ratio. The background is left transparent, so the one file drops onto either
+ *  the light or the dark backing it is shown over. */
+const png = (markup, height) =>
+  new Resvg(markup, { fitTo: { mode: 'height', value: height } }).render().asPng()
+
+// The names the assets are published under are not the ones they carry in here:
+// the whole organ goes out as the diagram, and the glyph as the logo. Each lands
+// in a directory of its own, holding its SVG and a PNG per size.
+for (const [dir, asset, sizes] of [
+  ['diagram', full, SIZES.full],
+  ['mark', mark, SIZES.mark],
+  ['logo', glyph, SIZES.glyph],
+]) {
+  mkdirSync(new URL(`${dir}/`, OUT), { recursive: true })
+  const stem = `${dir}/splean-${dir}`
+  writeFileSync(out(`${stem}.svg`), asset.markup)
+  for (const size of sizes) writeFileSync(out(`${stem}-${size}.png`), png(asset.markup, size))
+}
 
 /** One row of a mark across the sizes it is meant for, over a background. */
 const row = (label, sizes, { box, markup, ratio }, background, dark) => `
@@ -140,11 +160,11 @@ const html = `<!doctype html>
 <h1>SpLean mark</h1>
 <p class="sub">The spleen diagram as a logo: same node positions, wires and Pauli webs as the plate, with the labels, phases, scalar and badge dropped, the vessels cut back to stubs at the hilum, and progressively less kept as the mark gets smaller.</p>
 
-${row('Whole organ — logo.svg', SIZES.full, full, '#fcfcfd', false)}
+${row('Whole organ — diagram/splean-diagram.svg', SIZES.full, full, '#fcfcfd', false)}
 ${row('Whole organ, on dark', SIZES.full, full, '#1c1c1f', true)}
-${row('Sparse mark — logo-mark.svg', SIZES.mark, mark, '#fcfcfd', false)}
+${row('Sparse mark — mark/splean-mark.svg', SIZES.mark, mark, '#fcfcfd', false)}
 ${row('Sparse mark, on dark', SIZES.mark, mark, '#1c1c1f', true)}
-${row('Glyph — logo-glyph.svg', SIZES.glyph, glyph, '#fcfcfd', false)}
+${row('Glyph — logo/splean-logo.svg', SIZES.glyph, glyph, '#fcfcfd', false)}
 ${row('Glyph, on dark', SIZES.glyph, glyph, '#1c1c1f', true)}
 `
 
