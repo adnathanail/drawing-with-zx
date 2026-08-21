@@ -3,6 +3,7 @@
 // Run it with `node spleen.mjs`, then open `out/spleen.html`.
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
+import { CANVAS_FILL } from '@adnathanail/zxcc/constants'
 import { C, drawing, LABEL_FILL, layers } from './spleenDrawing.mjs'
 
 const W = 700
@@ -21,7 +22,7 @@ const html = `<!doctype html>
   }
   h1 { font-size: 1.1rem; font-weight: 600; margin: 0 0 0.25rem; }
   p.sub { margin: 0 0 1.25rem; color: #666; }
-  svg { display: block; background-color: #fcfcfd; }
+  svg { display: block; background-color: ${CANVAS_FILL}; }
   .attribution text { font: 11px system-ui, sans-serif; fill: #333; user-select: none; }
   .attribution rect { fill: rgba(226, 227, 229, 0.5); }
   .attribution a tspan { fill: #0366d6; }
@@ -62,7 +63,7 @@ ${layers(drawing())}
   <li><span class="wire" style="border-color:${C.Hedge}"></span><b>Hadamard wire</b> — arterial: splenic to trabecular to central</li>
   <li><span class="wire"></span><b>Plain wire</b> — venous return and the capsule</li>
   <li><span class="wire" style="border-color:${C.Xedge}"></span><b>W-io wire</b> — the efferent lymphatic</li>
-  <li><span class="wire" style="border-top-width:5px;border-color:${C.I}"></span><b>Pauli web</b> — grey for the fibrous capsule, red along the cords</li>
+  <li><span class="wire" style="border-top-width:5px;border-color:${C.Idark}"></span><b>Pauli web</b> — grey for the fibrous capsule, red along the cords</li>
 </ul>
 
 <script>

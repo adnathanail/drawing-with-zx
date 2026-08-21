@@ -5,22 +5,14 @@
 // Everything is drawn with zxcc's own marks — pyzx's original palette, the
 // viewer's shapes and text slots, and half-edge Pauli-web strands.
 
+import { LABEL_FILL, ORIGINAL_COLORS, PHASE_FILL } from '@adnathanail/zxcc/constants'
+
+export { LABEL_FILL, PHASE_FILL }
+
 export const SIZE = 8 // scene.nodeSize at scale 40
 
-export const C = {
-  edge: '#000000',
-  Hedge: '#0088ff',
-  Xedge: '#999999',
-  boundary: '#000000',
-  X: '#ff8888',
-  Z: '#ccffcc',
-  H: '#ffff66',
-  Xdark: '#ff8888',
-  Zdark: '#99dd99',
-  I: '#dddddd',
-}
-export const PHASE_FILL = '#00d'
-export const LABEL_FILL = '#999'
+/** pyzx's original palette, straight from zxcc. */
+export const C = ORIGINAL_COLORS
 
 // id: [kind, x, y, label, phase, labelAnchor]. The anchor moves a label off
 // the default slot above the node, for the few that would otherwise land on a
@@ -151,7 +143,7 @@ export const EXTRA_EDGES = [
 export const CORD_WEB = ['r1 r2', 'r2 r3', 'r3 r4', 'r4 r5'].map(p => p.split(' '))
 
 const EDGE_COLOR = { simple: C.edge, hadamard: C.Hedge, 'w-io': C.Xedge }
-const WEB_COLOR = { I: C.I, X: C.Xdark, Z: C.Zdark }
+const WEB_COLOR = { I: C.Idark, X: C.Xdark, Z: C.Zdark }
 const NODE_FILL = { z: C.Z, x: C.X, h: C.H, boundary: C.boundary }
 
 // The label slot is the viewer's — 10px monospace grey, just above the node.

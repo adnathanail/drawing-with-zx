@@ -11,6 +11,7 @@
 // on light and dark.
 //
 // Run it with `node logo.mjs`, then open `out/logo.html`.
+import { CANVAS_FILL } from '@adnathanail/zxcc/constants'
 import { Resvg } from '@resvg/resvg-js'
 import { mkdirSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
@@ -168,11 +169,11 @@ const html = `<!doctype html>
 <h1>SpLean mark</h1>
 <p class="sub">The spleen diagram as a logo: same node positions, wires and Pauli webs as the plate, with the labels, phases, scalar and badge dropped, the vessels cut back to stubs at the hilum, and progressively less kept as the mark gets smaller.</p>
 
-${row('Whole organ — diagram/splean-diagram.svg', SIZES.diagram, diagram, '#fcfcfd', false)}
+${row('Whole organ — diagram/splean-diagram.svg', SIZES.diagram, diagram, CANVAS_FILL, false)}
 ${row('Whole organ, on dark', SIZES.diagram, diagram, '#1c1c1f', true)}
-${row('Sparse mark — mark/splean-mark.svg', SIZES.mark, mark, '#fcfcfd', false)}
+${row('Sparse mark — mark/splean-mark.svg', SIZES.mark, mark, CANVAS_FILL, false)}
 ${row('Sparse mark, on dark', SIZES.mark, mark, '#1c1c1f', true)}
-${row('Logo — logo/splean-logo.svg', SIZES.logo, logo, '#fcfcfd', false)}
+${row('Logo — logo/splean-logo.svg', SIZES.logo, logo, CANVAS_FILL, false)}
 ${row('Logo, on dark', SIZES.logo, logo, '#1c1c1f', true)}
 `
 
