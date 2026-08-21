@@ -105,6 +105,12 @@ const out = name => fileURLToPath(new URL(name, OUT))
 const png = (markup, height) =>
   new Resvg(markup, { fitTo: { mode: 'height', value: height } }).render().asPng()
 
+/** The device-pixel ratios each size is rasterised at. The sizes above are CSS
+ *  sizes, so on a 2x display the 1x file is stretched across twice the pixels it
+ *  has and goes soft; the @2x file is the one that lands pixel-for-pixel. The 1x
+ *  file is still the one to use where the count is the point, like a favicon. */
+const RATIOS = [1, 2, 4]
+
 // Each asset lands in a directory of its own, holding its SVG and a PNG per size.
 for (const [dir, asset, sizes] of [
   ['diagram', diagram, SIZES.diagram],
@@ -114,7 +120,11 @@ for (const [dir, asset, sizes] of [
   mkdirSync(new URL(`${dir}/`, OUT), { recursive: true })
   const stem = `${dir}/splean-${dir}`
   writeFileSync(out(`${stem}.svg`), asset.markup)
-  for (const size of sizes) writeFileSync(out(`${stem}-${size}.png`), png(asset.markup, size))
+  for (const size of sizes)
+    for (const ratio of RATIOS) {
+      const suffix = ratio > 1 ? `@${ratio}x` : ''
+      writeFileSync(out(`${stem}-${size}${suffix}.png`), png(asset.markup, size * ratio))
+    }
 }
 
 /** One row of a mark across the sizes it is meant for, over a background. */
